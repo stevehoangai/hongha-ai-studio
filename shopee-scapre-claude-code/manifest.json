@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Shopee Shop Scraper",
+  "version": "1.0.0",
+  "description": "Quét toàn bộ sản phẩm của một cửa hàng trên Shopee và xuất ra CSV / XLSX.",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://shopee.vn/*",
+    "https://*.shopee.vn/*"
+  ],
+  "background": {
+    "service_worker": "background/service-worker.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Shopee Shop Scraper"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["app/app.html"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

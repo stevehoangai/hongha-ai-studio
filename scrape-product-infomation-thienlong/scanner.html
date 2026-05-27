@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Thien Long Product Scanner</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <main class="app-shell">
+    <section class="topbar">
+      <div>
+        <div class="brand-strip">
+          <span class="brand-mark">HH</span>
+          <span class="brand-meta">Thực hiện bởi CSI</span>
+        </div>
+        <h1>Thien Long Product Scanner</h1>
+        <p>Dữ liệu công khai từ thienlong.vn, lưu kèm URL nguồn và thời điểm quét.</p>
+      </div>
+      <div class="status-pill" id="statusPill">Sẵn sàng</div>
+    </section>
+
+    <section class="control-grid">
+      <div class="control-panel">
+        <label for="startUrl">URL bắt đầu</label>
+        <input id="startUrl" type="url" value="https://thienlong.vn/products/" spellcheck="false">
+      </div>
+      <div class="control-panel small">
+        <label for="maxPages">Số trang / danh mục</label>
+        <input id="maxPages" type="number" min="0" value="0">
+        <span class="hint">0 = tự dừng khi hết sản phẩm</span>
+      </div>
+      <div class="control-panel small">
+        <label for="maxProducts">Giới hạn sản phẩm</label>
+        <input id="maxProducts" type="number" min="0" value="0">
+        <span class="hint">0 = không giới hạn</span>
+      </div>
+      <div class="control-panel small">
+        <label for="delayMs">Nghỉ giữa request</label>
+        <input id="delayMs" type="number" min="500" step="250" value="2000">
+        <span class="hint">ms, nên giữ chậm</span>
+      </div>
+      <label class="check-panel">
+        <input id="scanDetails" type="checkbox" checked>
+        <span>Quét trang chi tiết</span>
+      </label>
+    </section>
+
+    <section class="toolbar">
+      <button id="startBtn" class="primary-button" type="button">Bắt đầu quét</button>
+      <button id="stopBtn" class="secondary-button" type="button" disabled>Dừng</button>
+      <button id="exportXlsxBtn" class="secondary-button" type="button" disabled>Xuất XLSX</button>
+      <button id="exportCsvBtn" class="secondary-button" type="button" disabled>Xuất CSV</button>
+      <button id="clearBtn" class="ghost-button" type="button">Xóa bảng</button>
+    </section>
+
+    <section class="metrics-grid">
+      <div class="metric">
+        <span class="metric-label">Danh mục</span>
+        <strong id="collectionCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Sản phẩm</span>
+        <strong id="productCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Chi tiết đã quét</span>
+        <strong id="detailCount">0</strong>
+      </div>
+      <div class="metric">
+        <span class="metric-label">Lỗi</span>
+        <strong id="errorCount">0</strong>
+      </div>
+    </section>
+
+    <section class="progress-panel">
+      <div class="progress-head">
+        <strong id="currentTask">Chưa chạy</strong>
+        <span id="capturedAt"></span>
+      </div>
+      <div class="progress-track">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <ol id="logList" class="log-list"></ol>
+    </section>
+
+    <section class="table-shell">
+      <div class="table-head">
+        <h2>Bảng sản phẩm</h2>
+        <span id="tableNote">Chưa có dữ liệu</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tên sản phẩm</th>
+              <th>Danh mục</th>
+              <th>Giá</th>
+              <th>Giá gốc</th>
+              <th>Đã bán công khai</th>
+              <th>Thương hiệu</th>
+              <th>Mã SP</th>
+              <th>Tình trạng</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody id="productRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="app-footer">
+      <span>VPP Hồng Hà style</span>
+      <strong>Thực hiện bởi khasnhng - CSI</strong>
+    </footer>
+  </main>
+
+  <script src="scanner.js"></script>
+</body>
+
+</html>

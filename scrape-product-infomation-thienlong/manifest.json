@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Thien Long Product Scanner",
+  "version": "0.1.0",
+  "description": "Quet thong tin san pham cong khai tren thienlong.vn va xuat bang Excel. Thuc hien boi khasnhng - CSI.",
+  "author": "khasnhng - CSI",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://thienlong.vn/*",
+    "https://product.hstatic.net/*"
+  ],
+  "action": {
+    "default_title": "Thien Long Scanner",
+    "default_popup": "popup.html"
+  }
+}

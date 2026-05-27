@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Competitor Analysis Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">CA</div>
+        <div>
+          <strong>Competitor Analysis</strong>
+          <span>CSI workspace</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Dashboard">
+        <button class="nav-item active" type="button" data-view="overview">
+          <span class="nav-icon" aria-hidden="true">⌂</span>
+          <span>Tổng quan</span>
+        </button>
+        <button class="nav-item" type="button" data-view="thienlong">
+          <span class="nav-icon" aria-hidden="true">TL</span>
+          <span>Thiên Long</span>
+        </button>
+        <button class="nav-item" type="button" data-view="shopee">
+          <span class="nav-icon" aria-hidden="true">SP</span>
+          <span>Shopee</span>
+        </button>
+        <button class="nav-item" type="button" data-view="data">
+          <span class="nav-icon" aria-hidden="true">▦</span>
+          <span>Data Center</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-card">
+        <span class="eyebrow">Nguồn dữ liệu</span>
+        <strong>2 module</strong>
+        <p>Thiên Long public catalog và Shopee shop public.</p>
+      </div>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <div>
+          <h1>Dashboard phân tích đối thủ</h1>
+          <p>Quét, kiểm tra và xuất dữ liệu sản phẩm công khai trong một màn hình làm việc.</p>
+        </div>
+        <div class="server-pill" id="serverStatus">Đang kiểm tra server</div>
+      </header>
+
+      <main class="content">
+        <section class="view active" id="view-overview">
+          <div class="metric-grid">
+            <article class="metric-card">
+              <span class="metric-label">Tổng sản phẩm</span>
+              <strong id="overviewTotalProducts">0</strong>
+              <span id="overviewSources">0 nguồn có dữ liệu</span>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Thiên Long</span>
+              <strong id="overviewThienLong">0</strong>
+              <span>Sản phẩm đã quét</span>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Shopee</span>
+              <strong id="overviewShopee">0</strong>
+              <span>Sản phẩm đã quét</span>
+            </article>
+            <article class="metric-card">
+              <span class="metric-label">Giá trung vị</span>
+              <strong id="overviewMedianPrice">0đ</strong>
+              <span>Từ dữ liệu hiện có</span>
+            </article>
+          </div>
+
+          <div class="work-grid">
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Điều phối quét</h2>
+                  <p>Chọn module làm việc</p>
+                </div>
+              </div>
+              <div class="source-grid">
+                <button class="source-tile" type="button" data-view-jump="thienlong">
+                  <span class="tile-mark thienlong">TL</span>
+                  <strong>Thiên Long catalog</strong>
+                  <span id="tileTlCount">0 sản phẩm</span>
+                </button>
+                <button class="source-tile" type="button" data-view-jump="shopee">
+                  <span class="tile-mark shopee">SP</span>
+                  <strong>Shopee shop</strong>
+                  <span id="tileSpCount">0 sản phẩm</span>
+                </button>
+                <button class="source-tile" type="button" data-view-jump="data">
+                  <span class="tile-mark data">▦</span>
+                  <strong>Data Center</strong>
+                  <span id="tileDataCount">0 dòng</span>
+                </button>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Nhật ký hệ thống</h2>
+                  <p id="lastUpdated">Chưa có phiên quét</p>
+                </div>
+                <button class="icon-button" id="clearLogBtn" type="button" title="Xóa log">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <ol class="log-list compact" id="globalLog"></ol>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="view-thienlong">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Thiên Long Product Scanner</h2>
+                <p>Collection, product detail, CSV và XLSX</p>
+              </div>
+              <span class="status-pill" id="tlStatus">Sẵn sàng</span>
+            </div>
+
+            <div class="form-grid thienlong-form">
+              <label class="field wide">
+                <span>URL bắt đầu</span>
+                <input id="tlStartUrl" type="url" value="https://thienlong.vn/products/" spellcheck="false">
+              </label>
+              <label class="field">
+                <span>Số trang</span>
+                <input id="tlMaxPages" type="number" min="0" value="1">
+              </label>
+              <label class="field">
+                <span>Giới hạn SP</span>
+                <input id="tlMaxProducts" type="number" min="0" value="40">
+              </label>
+              <label class="field">
+                <span>Delay ms</span>
+                <input id="tlDelayMs" type="number" min="500" step="250" value="1500">
+              </label>
+              <label class="toggle-field">
+                <input id="tlScanDetails" type="checkbox" checked>
+                <span>Quét chi tiết</span>
+              </label>
+            </div>
+
+            <div class="action-row">
+              <button class="button primary" id="tlStartBtn" type="button">
+                <span aria-hidden="true">▶</span>
+                <span>Bắt đầu</span>
+              </button>
+              <button class="button secondary" id="tlStopBtn" type="button" disabled>
+                <span aria-hidden="true">■</span>
+                <span>Dừng</span>
+              </button>
+              <button class="button ghost" id="tlExportCsvBtn" type="button" disabled>
+                <span aria-hidden="true">↓</span>
+                <span>CSV</span>
+              </button>
+              <button class="button ghost" id="tlExportXlsxBtn" type="button" disabled>
+                <span aria-hidden="true">↓</span>
+                <span>XLSX</span>
+              </button>
+              <button class="button danger" id="tlClearBtn" type="button" disabled>
+                <span aria-hidden="true">×</span>
+                <span>Xóa</span>
+              </button>
+            </div>
+          </section>
+
+          <div class="metric-grid four">
+            <article class="metric-card small">
+              <span class="metric-label">Danh mục</span>
+              <strong id="tlCollectionCount">0</strong>
+            </article>
+            <article class="metric-card small">
+              <span class="metric-label">Sản phẩm</span>
+              <strong id="tlProductCount">0</strong>
+            </article>
+            <article class="metric-card small">
+              <span class="metric-label">Chi tiết</span>
+              <strong id="tlDetailCount">0</strong>
+            </article>
+            <article class="metric-card small">
+              <span class="metric-label">Lỗi</span>
+              <strong id="tlErrorCount">0</strong>
+            </article>
+          </div>
+
+          <section class="panel">
+            <div class="progress-head">
+              <strong id="tlCurrentTask">Chưa chạy</strong>
+              <span id="tlCapturedAt"></span>
+            </div>
+            <div class="progress-track">
+              <div id="tlProgressBar" class="progress-fill thienlong-fill"></div>
+            </div>
+            <ol id="tlLogList" class="log-list"></ol>
+          </section>
+
+          <section class="panel table-panel">
+            <div class="table-toolbar">
+              <div>
+                <h2>Bảng Thiên Long</h2>
+                <span id="tlTableNote">Chưa có dữ liệu</span>
+              </div>
+              <label class="search-field">
+                <span>Tìm</span>
+                <input id="tlFilter" type="search" placeholder="Tên, danh mục, mã sản phẩm">
+              </label>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th class="num">Giá</th>
+                    <th class="num">Giá gốc</th>
+                    <th class="num">Đã bán</th>
+                    <th>Thương hiệu</th>
+                    <th>Mã SP</th>
+                    <th>Tình trạng</th>
+                    <th>Link</th>
+                  </tr>
+                </thead>
+                <tbody id="tlRows"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-shopee">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Shopee Shop Scanner</h2>
+                <p>Shop public products, pricing, rating và sold count</p>
+              </div>
+              <span class="status-pill" id="spStatus">Sẵn sàng</span>
+            </div>
+
+            <div class="form-grid shopee-form">
+              <label class="field wide">
+                <span>Link shop</span>
+                <input id="spShopUrl" type="url" value="https://shopee.vn/vppklong#product_list" spellcheck="false">
+              </label>
+              <label class="field">
+                <span>Limit / page</span>
+                <input id="spLimit" type="number" min="10" max="100" value="60">
+              </label>
+              <label class="field">
+                <span>Giới hạn SP</span>
+                <input id="spMaxItems" type="number" min="0" value="100">
+              </label>
+              <label class="field">
+                <span>Delay ms</span>
+                <input id="spDelayMs" type="number" min="250" step="250" value="700">
+              </label>
+            </div>
+
+            <div class="action-row">
+              <button class="button primary shopee-primary" id="spStartBtn" type="button">
+                <span aria-hidden="true">▶</span>
+                <span>Bắt đầu</span>
+              </button>
+              <button class="button ghost" id="spSessionBtn" type="button">
+                <span aria-hidden="true">◉</span>
+                <span>Phiên Shopee</span>
+              </button>
+              <button class="button secondary" id="spStopBtn" type="button" disabled>
+                <span aria-hidden="true">■</span>
+                <span>Dừng</span>
+              </button>
+              <button class="button ghost" id="spExportCsvBtn" type="button" disabled>
+                <span aria-hidden="true">↓</span>
+                <span>CSV</span>
+              </button>
+              <button class="button ghost" id="spExportXlsxBtn" type="button" disabled>
+                <span aria-hidden="true">↓</span>
+                <span>XLSX</span>
+              </button>
+              <button class="button danger" id="spClearBtn" type="button" disabled>
+                <span aria-hidden="true">×</span>
+                <span>Xóa</span>
+              </button>
+            </div>
+          </section>
+
+          <div class="metric-grid four">
+            <article class="metric-card small">
+              <span class="metric-label">Sản phẩm</span>
+              <strong id="spProductCount">0</strong>
+            </article>
+            <article class="metric-card small">
+              <span class="metric-label">Trang</span>
+              <strong id="spPageCount">0</strong>
+            </article>
+            <article class="metric-card small">
+              <span class="metric-label">Tổng shop</span>
+              <strong id="spTotalCount">-</strong>
+            </article>
+            <article class="metric-card small">
+              <span class="metric-label">Shop</span>
+              <strong id="spShopName">-</strong>
+            </article>
+          </div>
+
+          <section class="panel">
+            <div class="progress-head">
+              <strong id="spCurrentTask">Chưa chạy</strong>
+              <span id="spCapturedAt"></span>
+            </div>
+            <div class="progress-track">
+              <div id="spProgressBar" class="progress-fill shopee-fill"></div>
+            </div>
+            <ol id="spLogList" class="log-list"></ol>
+          </section>
+
+          <section class="panel table-panel">
+            <div class="table-toolbar">
+              <div>
+                <h2>Bảng Shopee</h2>
+                <span id="spTableNote">Chưa có dữ liệu</span>
+              </div>
+              <label class="search-field">
+                <span>Tìm</span>
+                <input id="spFilter" type="search" placeholder="Tên, danh mục, shop">
+              </label>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th class="num">Giá</th>
+                    <th class="num">Giá gốc</th>
+                    <th class="num">% giảm</th>
+                    <th class="num">Đã bán</th>
+                    <th class="num">Rating</th>
+                    <th>Shop</th>
+                    <th>Link</th>
+                  </tr>
+                </thead>
+                <tbody id="spRows"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="view-data">
+          <section class="panel table-panel">
+            <div class="table-toolbar">
+              <div>
+                <h2>Data Center</h2>
+                <span id="combinedNote">Chưa có dữ liệu</span>
+              </div>
+              <div class="table-actions">
+                <label class="search-field">
+                  <span>Nguồn</span>
+                  <select id="combinedSource">
+                    <option value="all">Tất cả</option>
+                    <option value="Thien Long">Thiên Long</option>
+                    <option value="Shopee">Shopee</option>
+                  </select>
+                </label>
+                <label class="search-field">
+                  <span>Tìm</span>
+                  <input id="combinedFilter" type="search" placeholder="Tên, nguồn, danh mục">
+                </label>
+                <button class="button ghost" id="combinedExportCsvBtn" type="button" disabled>
+                  <span aria-hidden="true">↓</span>
+                  <span>CSV</span>
+                </button>
+                <button class="button ghost" id="combinedExportXlsxBtn" type="button" disabled>
+                  <span aria-hidden="true">↓</span>
+                  <span>XLSX</span>
+                </button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Nguồn</th>
+                    <th>Ảnh</th>
+                    <th>Sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th class="num">Giá</th>
+                    <th class="num">Giá gốc</th>
+                    <th class="num">% giảm</th>
+                    <th class="num">Đã bán</th>
+                    <th>Shop / Brand</th>
+                    <th>Link</th>
+                  </tr>
+                </thead>
+                <tbody id="combinedRows"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="xlsx-writer.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

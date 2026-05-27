@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Shopee Shop Scraper</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">S</div>
+      <div>
+        <div class="title">Shopee Shop Scraper by CSI</div>
+        <div class="sub">Quét toàn bộ sản phẩm của 1 cửa hàng Shopee và xuất CSV / XLSX
+          - Thực hiện bởi Trung Tâm Chiến Lược & Đổi Mới - VPP Hồng Hà
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <label class="lbl" for="shopUrl">Link cửa hàng Shopee</label>
+      <div class="row">
+        <input id="shopUrl" type="text"
+          placeholder="https://shopee.vn/vppklong  hoặc  https://shopee.vn/vppklong#product_list"
+          value="https://shopee.vn/vppklong#product_list" />
+        <button id="btnScan" class="primary">Bắt đầu quét</button>
+        <button id="btnStop" class="secondary" disabled>Dừng</button>
+      </div>
+
+      <div class="opts">
+        <label>
+          Giới hạn tối đa:
+          <input id="maxItems" type="number" min="0" value="0" />
+          <span class="muted">(0 = không giới hạn)</span>
+        </label>
+        <label>
+          Delay (ms) giữa các trang:
+          <input id="delayMs" type="number" min="0" value="600" />
+        </label>
+        <label>
+          Số lần cuộn / trang:
+          <input id="scrollSteps" type="number" min="2" max="30" value="10" />
+        </label>
+      </div>
+    </section>
+
+    <section class="card progress-card">
+      <div class="progress-head">
+        <div>
+          <div id="status" class="status">Sẵn sàng</div>
+          <div id="shopInfo" class="shop-info"></div>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-num" id="statCount">0</div>
+            <div class="stat-lbl">Sản phẩm</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="statPage">0</div>
+            <div class="stat-lbl">Trang</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" id="statTotal">—</div>
+            <div class="stat-lbl">Tổng</div>
+          </div>
+        </div>
+      </div>
+      <div class="bar">
+        <div id="bar" class="bar-fill"></div>
+      </div>
+      <div id="log" class="log"></div>
+    </section>
+
+    <section class="card">
+      <div class="table-toolbar">
+        <div class="left">
+          <input id="filterInput" type="text" placeholder="Lọc theo tên / danh mục / shop..." />
+        </div>
+        <div class="right">
+          <button id="btnCsv" class="ghost" disabled>Xuất CSV</button>
+          <button id="btnXlsx" class="ghost" disabled>Xuất XLSX</button>
+          <button id="btnClear" class="danger" disabled>Xóa dữ liệu</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ảnh</th>
+              <th>Tên sản phẩm</th>
+              <th>Danh mục</th>
+              <th class="num">Giá (đ)</th>
+              <th class="num">Giá gốc (đ)</th>
+              <th class="num">% giảm</th>
+              <th class="num">Kho</th>
+              <th class="num">Đã bán</th>
+              <th class="num">⭐</th>
+              <th class="num">Lượt thích</th>
+              <th>Shop</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div id="empty" class="empty">Chưa có dữ liệu. Nhập link cửa hàng phía trên rồi bấm "Bắt đầu quét".</div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      Dữ liệu chỉ lấy thông tin <b>công khai</b> mà website hiển thị tại thời điểm quét.
+      Trường "Đã bán" là <code>public_sold_count</code> mà Shopee hiển thị, không phải số bán thật của shop.
+    </footer>
+  </main>
+
+  <script src="../lib/xlsx-writer.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

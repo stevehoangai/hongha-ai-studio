@@ -1,0 +1,12 @@
+{
+  "name": "competitor-analysis-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Unified competitor analysis web app for Thien Long and Shopee public product data.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
